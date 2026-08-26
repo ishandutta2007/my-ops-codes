@@ -1,6 +1,7 @@
 *.bak
 *.bk
 *.env
+*.json
 .env
 .env.*
 !.env.example

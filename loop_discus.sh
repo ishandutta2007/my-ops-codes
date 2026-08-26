@@ -1,8 +1,27 @@
 #!/bin/bash
 
-root_path="C:\Users\ishan\Documents\Projects"
-GITHUB_TOKEN="github_pat_11AATJA6Q0Sq4gGGfbZqjL_my_key"
-ADMIN_TOKEN="github_pat_11AATJA6Q0Sq4gGGfbZqjL_my_key"
+# Load environment variables from .env if present
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [ -f "$SCRIPT_DIR/.env" ]; then
+    set -a
+    source "$SCRIPT_DIR/.env"
+    set +a
+elif [ -f ".env" ]; then
+    set -a
+    source ".env"
+    set +a
+fi
+
+export GITHUB_TOKEN="${GITHUB_TOKEN:-}"
+export GH_TOKEN="${GH_TOKEN:-$GITHUB_TOKEN}"
+export ADMIN_TOKEN="${ADMIN_TOKEN:-$GITHUB_TOKEN}"
+
+if [ -z "$GITHUB_TOKEN" ]; then
+    echo "Error: GITHUB_TOKEN is not set. Please define it in .env or as an environment variable."
+    exit 1
+fi
+
+root_path="C:/Users/ishan/Documents/Projects"
 
 repositories=(
     "Awesome-Vacation-Rental-Management"
