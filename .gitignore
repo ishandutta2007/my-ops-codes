@@ -1,6 +1,10 @@
 *.bak
 *.bk
 *.env
+.env
+.env.*
+!.env.example
+*.txt
 .cache
 __pycache__/
 contributors.txt
