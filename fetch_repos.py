@@ -40,7 +40,6 @@ def get_all_repositories():
     repos = []
     page = 1
     per_page = 100
-    user="ishandutta2007"
     
     print("Fetching repositories from GitHub...")
     
