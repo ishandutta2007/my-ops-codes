@@ -41,11 +41,14 @@ def get_graphql_repo_count(username, token):
         "User-Agent": "Python-Script"
     }
     
-    # GraphQL query to get both public and private totals
+    # GraphQL query to get public (sources & forks) and private totals
     query = """
     query($login: String!) {
       user(login: $login) {
-        public: repositories(privacy: PUBLIC) {
+        publicSources: repositories(privacy: PUBLIC, isFork: false) {
+          totalCount
+        }
+        publicForks: repositories(privacy: PUBLIC, isFork: true) {
           totalCount
         }
         private: repositories(privacy: PRIVATE) {
@@ -73,10 +76,14 @@ def get_graphql_repo_count(username, token):
             print(f"❌ User '{username}' not found.")
             return
 
-        public_count = user_data["public"]["totalCount"]
+        public_sources = user_data["publicSources"]["totalCount"]
+        public_forks = user_data["publicForks"]["totalCount"]
+        public_count = public_sources + public_forks
         private_count = user_data["private"]["totalCount"]
         
         print(f"📊 Public Repositories: {public_count}")
+        print(f"   ├─ 📦 Sources (Own/Original): {public_sources}")
+        print(f"   └─ 🍴 Forks: {public_forks}")
         print(f"🔒 Private Repositories: {private_count}")
         print(f"✨ Total Repositories: {public_count + private_count}")
     else:
