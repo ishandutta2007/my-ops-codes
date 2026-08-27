@@ -131,6 +131,27 @@ fi
 
 ---
 
+### Users with Many Repos on GitHub
+
+| Username | Public Repositories | Public Sources |
+| :--- | :---: | :---: |
+| sindresorhus | 1164 | 1153 |
+| keijiro | 948 | 927 |
+| phodal | 531 | 508 |
+| egoist | 881 | 808 |
+| simonw | 1023 | 687 |
+| mattn | 2297 | 1230 |
+| mafintosh | 1147 | 879 |
+| max-mapper | 916 | 563 |
+| liquidslr | 522 | 505 |
+| camenduru | 1694 | 1078 |
+| jonschlinkert | 1164 | 1094 |
+| WebReflection | 640 | 547 |
+| IonicaBizau | 567 | 563 |
+| nirzaf | 1233 | 971 |
+| vim-scripts | 5209 | 5209 |
+
+
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome!
