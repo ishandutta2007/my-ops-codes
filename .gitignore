@@ -6,7 +6,6 @@
 .env.*
 !.env.example
 *.txt
-*.csv
 .cache
 __pycache__/
 contributors.txt
