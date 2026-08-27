@@ -25,6 +25,7 @@ def load_env(env_path=None):
                     if key and key not in os.environ:
                         os.environ[key] = val
 
+
 # Load .env file
 load_env()
 
@@ -40,11 +41,8 @@ def get_graphql_repo_count(username, token):
         return None
 
     url = "https://api.github.com/graphql"
-    headers = {
-        "Authorization": f"Bearer {token}",
-        "User-Agent": "Python-Script"
-    }
-    
+    headers = {"Authorization": f"Bearer {token}", "User-Agent": "Python-Script"}
+
     # GraphQL query to get public (sources & forks) and private totals
     query = """
     query($login: String!) {
@@ -61,20 +59,22 @@ def get_graphql_repo_count(username, token):
       }
     }
     """
-    
+
     variables = {"login": username}
     try:
-        response = requests.post(url, json={"query": query, "variables": variables}, headers=headers)
+        response = requests.post(
+            url, json={"query": query, "variables": variables}, headers=headers
+        )
     except requests.RequestException as e:
         print(f"❌ Request Error for {username}: {e}")
         return None
-    
+
     if response.status_code == 200:
         res_data = response.json()
         if "errors" in res_data:
             print(f"❌ GraphQL Error for {username}: {res_data['errors']}")
             return None
-            
+
         user_data = res_data.get("data", {}).get("user")
         if not user_data:
             print(f"❌ User '{username}' not found.")
@@ -85,7 +85,7 @@ def get_graphql_repo_count(username, token):
         public_count = public_sources + public_forks
         private_count = user_data["private"]["totalCount"]
         total_count = public_count + private_count
-        
+
         print(f"\n👤 User: {username}")
         print(f"📊 Public Repositories: {public_count}")
         print(f"   ├─ 📦 Sources (Own/Original): {public_sources}")
@@ -99,7 +99,7 @@ def get_graphql_repo_count(username, token):
             "public_sources": public_sources,
             "public_forks": public_forks,
             "private_repositories": private_count,
-            "total_repositories": total_count
+            "total_repositories": total_count,
         }
     else:
         print(f"❌ Error fetching {username}: {response.status_code} - {response.text}")
@@ -130,30 +130,36 @@ def save_results_to_csv(results, file_path):
         "Public Sources",
         "Public Forks",
         "Private Repositories",
-        "Total Repositories"
+        "Total Repositories",
     ]
     with open(file_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         for r in results:
-            writer.writerow({
-                "Username": r["username"],
-                "Public Repositories": r["public_repositories"],
-                "Public Sources": r["public_sources"],
-                "Public Forks": r["public_forks"],
-                "Private Repositories": r["private_repositories"],
-                "Total Repositories": r["total_repositories"]
-            })
+            writer.writerow(
+                {
+                    "Username": r["username"],
+                    "Public Repositories": r["public_repositories"],
+                    "Public Sources": r["public_sources"],
+                    "Public Forks": r["public_forks"],
+                    "Private Repositories": r["private_repositories"],
+                    "Total Repositories": r["total_repositories"],
+                }
+            )
     print(f"\n📁 Saved results to '{file_path}'")
 
 
 if __name__ == "__main__":
     if not GITHUB_TOKEN:
-        print("⚠️ Warning: GITHUB_TOKEN is not set. Please add it to your .env file or export it as an environment variable.")
+        print(
+            "⚠️ Warning: GITHUB_TOKEN is not set. Please add it to your .env file or export it as an environment variable."
+        )
 
     users = read_users_from_file(INPUT_FILE)
     if not users:
-        print(f"No usernames found in '{INPUT_FILE}'. Please add at least one username per line.")
+        print(
+            f"No usernames found in '{INPUT_FILE}'. Please add at least one username per line."
+        )
     else:
         print(f"Found {len(users)} user(s) to process from '{INPUT_FILE}'.")
         results = []

@@ -25,7 +25,9 @@ def scrape_gitstar_users(max_pages=10, cache_dir="cache_gitstar_pages"):
         html_content = None
 
         if cache_file.exists():
-            print(f"Loading Page {page}/{max_pages} from local cache: {cache_file.name}")
+            print(
+                f"Loading Page {page}/{max_pages} from local cache: {cache_file.name}"
+            )
             html_content = cache_file.read_text(encoding="utf-8")
         else:
             url = f"{base_url}?page={page}"
@@ -62,15 +64,27 @@ def scrape_gitstar_users(max_pages=10, cache_dir="cache_gitstar_pages"):
         for item in items:
             href = item.get("href", "").strip()
             # Ensure it is a user profile link (and not pagination or internal nav)
-            if not href or href.startswith("/users") or href.startswith("/organizations") or href.startswith("/repositories") or href.startswith("/search"):
+            if (
+                not href
+                or href.startswith("/users")
+                or href.startswith("/organizations")
+                or href.startswith("/repositories")
+                or href.startswith("/search")
+            ):
                 continue
 
             try:
                 # 1. Extract Username from inner span or href
-                user_span = item.select_one(".name .hidden-xs, .name .hidden-sm, .name span")
+                user_span = item.select_one(
+                    ".name .hidden-xs, .name .hidden-sm, .name span"
+                )
                 username = user_span.text.strip() if user_span else href.lstrip("/")
 
-                profile_url = f"https://gitstar-ranking.com{href}" if not href.startswith("http") else href
+                profile_url = (
+                    f"https://gitstar-ranking.com{href}"
+                    if not href.startswith("http")
+                    else href
+                )
 
                 # 2. Extract Rank from .name (e.g. "1." -> 1)
                 name_elem = item.select_one(".name")
